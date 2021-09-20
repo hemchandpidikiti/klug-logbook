@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>KLU</h1>
+    {% if user.is_authenticated %}
+    <h2>Your Name is: {{ user.username }}</h2>
+    {% else %}
+    <h2>You are not logged in.</h2>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form1 }}
+        <input type="submit" value="login" name="in">
+    </form>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form2 }}
+        <input type="submit" value="logout" name="out">
+    </form>
+</body>
+</html>
