@@ -11,5 +11,5 @@ class AttendeFormIn(forms.ModelForm):
 class AttendeFormOut(forms.ModelForm):
     class Meta:
         model = Attende
-        fields = ['uid', 'date_out_time']
-        widgets = {'date_out_time': forms.HiddenInput()}
+        fields = ['uid']
+        #, 'date_out_time' widgets = {'date_out_time': forms.HiddenInput()}
