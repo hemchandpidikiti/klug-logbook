@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
+	{% load static %}
   	<title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	
 
-	<link href="fonts\fonts.css" rel="stylesheet">
-	<link href="fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css" rel="stylesheet">
+	<link href="{%static 'fonts\fonts.css' %}" rel="stylesheet">
+	<link href="{%static 'fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css' %}" rel="stylesheet">
 	
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="{%static 'css/style.css' %}">
 
 	</head>
 	<body>
@@ -19,7 +20,7 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6 text-center mb-5">
-					<img src="images/KLUG.png" class="rounded mx-auto d-block" alt="KLUG" style="height: 100px;width: 200px;">
+					<img src="{%static 'images/KLUG.png' %}" class="rounded mx-auto d-block" alt="KLUG" style="height: 100px;width: 200px;">
 					<br>
 					<h2 class="heading-section">LOGBOOK</h2>
 				</div>
@@ -33,9 +34,9 @@
 			      	<div class="d-flex">
 								<div class="w-100">
 									<p class="social-media d-flex justify-content-end">
-										<a href="index.html" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
-										<a href="Attendence.html" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
-										<a href="ChangePWD.html" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="{%static 'index.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{%static 'Attendence.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{%static 'ChangePWD.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
 										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
 									</p>
 								</div>
@@ -43,7 +44,7 @@
 					  <div class="media position-relative">
 						
 						<div class="media-body">
-							&emsp;&emsp;&emsp;&emsp;<a href="ByDate.html" class="stretched-link" ><img src="images/calender.jpeg" class="mr-3" alt="..."></a>
+							&emsp;&emsp;&emsp;&emsp;<a href="{%static 'ByDate.html' %}" class="stretched-link" ><img src="images/calender.jpeg" class="mr-3" alt="..."></a>
 						</div>
 					
 					  </div>
@@ -68,10 +69,10 @@
 		</div>
 	</section>
 
-	<script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
+	<script src="{%static 'js/jquery.min.js' %}"></script>
+  <script src="{%static 'js/popper.js' %}"></script>
+  <script src="{%static 'js/bootstrap.min.js' %}"></script>
+  <script src="{%static 'js/main.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
 
