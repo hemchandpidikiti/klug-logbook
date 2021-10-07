@@ -76,7 +76,36 @@ def bydate(request):
     return render(request, 'logging/bydate.html')
 
 def id(request):
-    return render(request, 'logging/id.html')
+    form = AttendeFormOut()
+    ud=[]
+    if request.method == 'POST':
+        form = AttendeFormOut(request.POST)
+        if form.is_valid():
+            userid = request.POST.get('uid')
+            try:
+                udetails = Attende.objects.filter(uid=userid)
+                #print(udetails)
+                ud= list(udetails)
+                #print(ud)
+                '''for u in ud:
+                    print(u.uid)
+                for udetail in udetails:
+                    ud = udetail
+                    print(ud)
+                    #print(udetail.uid)
+                #print(udetails.uid)'''
+            except NotFound:
+                print("IDNotFound")
+
+    #context = {'form': form, 'udetails': udetails}
+    return render(request, 'logging/id.html', {'ud': ud })
+    '''
+                  {
+                      'uid': udetails.uid,
+                      'purpose': udetails.purpose,
+                      'date_in_time': udetails.date_in_time,
+                      'date_out_time': udetails.date_out_time
+                  })'''
 
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
