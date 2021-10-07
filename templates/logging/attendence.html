@@ -35,9 +35,9 @@
 			      	<div class="d-flex">
 								<div class="w-100">
 									<p class="social-media d-flex justify-content-end">
-										<a href="{% static 'index.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
-										<a href="{% static 'Attendence.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
-										<a href="{% static 'ChangePWD.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="{% url 'index' %}"  class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{% url 'attendence' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{% url 'changepwd' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
 										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
 									</p>
 								</div>
@@ -45,7 +45,7 @@
 					  <div class="media position-relative">
 						
 						<div class="media-body">
-							&emsp;&emsp;&emsp;&emsp;<a href="{% static 'ByDate.html' %}" class="stretched-link" ><img src="{% static 'images/calender.jpeg' %}" class="mr-3" alt="..."></a>
+							&emsp;&emsp;&emsp;&emsp;<a href="{% url 'bydate' %}" class="stretched-link" ><img src="{% static 'images/calender.jpeg' %}" class="mr-3" alt="..."></a>
 						</div>
 					
 					  </div>
@@ -54,7 +54,7 @@
 					<div class="media position-relative">
 						
 						<div class="media-body">
-							&emsp;&emsp;&emsp;&emsp;<a href="{% static 'ID.html' %}"  class="stretched-link" ><img src="{% static 'images/ID-removebg-preview.png' %}" class="mr-3" alt="..."></a>
+							&emsp;&emsp;&emsp;&emsp;<a href="{% url 'id' %}"  class="stretched-link" ><img src="{% static 'images/ID-removebg-preview.png' %}" class="mr-3" alt="..."></a>
 						</div>
 					  </div>	
 					

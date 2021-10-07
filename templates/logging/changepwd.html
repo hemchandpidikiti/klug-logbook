@@ -9,7 +9,7 @@
 	
 
 	<link rel="stylesheet" href="{%static 'fonts\fonts.css' %}">
-	<link rel="stylesheet" href="{%static 'fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css] %}" >
+	<link rel="stylesheet" href="{%static 'fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css' %}" >
 	
 	<link rel="stylesheet" href="{%static 'css/style.css' %}">
 
@@ -34,9 +34,9 @@
 			      	<div class="d-flex">
 								<div class="w-100">
 									<p class="social-media d-flex justify-content-end">
-										<a href="{%static 'index.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
-										<a href="{%static 'Attendence.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
-										<a href="{%static 'ChangePWD.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="{% url 'index' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{% url 'attendence' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{% url 'changepwd' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
 										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
 									</p>
 								</div>

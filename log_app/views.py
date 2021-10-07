@@ -5,8 +5,14 @@ from django import http
 from .forms import AttendeFormIn, AttendeFormOut
 from .models import Attende
 
+
+import pytz
+#from datetime import datetime
 import datetime
-now = datetime.datetime.now()
+tz_NY = pytz.timezone('Asia/Kolkata')
+#datetime_NY = datetime.now(tz_NY)
+IST = pytz.timezone('Asia/Kolkata')
+now = datetime.datetime.now(IST)
 #temp = now.strftime('%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=datetime.timezone.utc)
 
 # Create your views here.
@@ -47,6 +53,8 @@ def index(request):
                 lpk = l.pk
                 #print(lpk)
                 #print(type(lpk))
+                #now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                #datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
                 Attende.objects.filter(id=lpk).update(date_out_time=now.strftime('%Y-%m-%d %H:%M:%S.%f'))
             except InDoesNotExist:
                 print("In required")
@@ -60,6 +68,18 @@ def index(request):
 
 def details():
     data1 = Attende.objects.get(uid=userid)
+
+def attendence(request):
+    return render(request, 'logging/attendence.html')
+
+def bydate(request):
+    return render(request, 'logging/bydate.html')
+
+def id(request):
+    return render(request, 'logging/id.html')
+
+def changepwd(request):
+    return render(request, 'logging/changepwd.html')
 
 def register(request):
     if request.method == 'POST':

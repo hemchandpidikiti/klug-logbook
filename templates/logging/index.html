@@ -34,24 +34,25 @@
 			      	<div class="d-flex">
 								<div class="w-100">
 									<p class="social-media d-flex justify-content-end">
-										<a href="{%static 'index.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
-										<a href="{%static 'Attendence.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
-										<a href="{%static 'ChangePWD.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="{% url 'index' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{% url 'attendence' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{% url 'changepwd' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
 										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
 									</p>
 								</div>
 			      	</div>
-							<form action="#" class="signin-form">
+							<form action="" class="signin-form" method="post">
+								{% csrf_token %}
 			      		<div class="form-group mb-3">
 			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>ID Number</b></strong></label>
-			      			<input type="text" class="form-control" placeholder="Enter ID Number" required>
+			      			<input type="number" name="uid" class="form-control" placeholder="Enter ID Number" required>
 			      		</div>
 		            	<div class="form-group mb-3">
 		            	<label class="label">&nbsp&nbsp&nbsp&nbspPurpose</label>
-		              <input type="text" class="form-control" placeholder="Enter Purpose" required>
+		              <input type="text" name="purpose" maxlength="12" class="form-control" placeholder="Enter Purpose" required>
 		            </div>
 		            <div class="form-group">
-		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Log In">
+		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Log In" name="in">
 		            </div>
 		            
 		          </form>
@@ -60,13 +61,14 @@
 							
 					<div class="text w-100">
 						
-						<form action="#" class="signin-form">
+						<form action="" class="signin-form" method="post">
+							{% csrf_token %}
 							<div class="form-group mb-3">
 								
 								<label class="label">&nbsp&nbsp&nbsp&nbspID Number</label>
-								<input type="text " style="background-color:#e6e6e6;" class="form-control" placeholder="Enter ID Number" required>
+								<input type="number" name="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter ID Number" required>
 							</div>
-						<input type="submit" class="btn btn-white btn-outline-white" value="log out">
+						<input type="submit" class="btn btn-white btn-outline-white" value="log out" name="out">
 					</form>
 						
 					</div>
