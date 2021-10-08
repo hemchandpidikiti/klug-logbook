@@ -6,7 +6,7 @@ class AttendeFormIn(forms.ModelForm):
     class Meta:
         model = Attende
         fields = '__all__'
-        exclude = ['date_out_time']
+        exclude = ['out_time']
 
 class AttendeFormOut(forms.ModelForm):
     class Meta:
