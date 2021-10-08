@@ -5,20 +5,21 @@ from django import http
 from .forms import AttendeFormIn, AttendeFormOut
 from .models import Attende
 
-
 import pytz
-#from datetime import datetime
+# from datetime import datetime
 import datetime
+
 tz_NY = pytz.timezone('Asia/Kolkata')
-#datetime_NY = datetime.now(tz_NY)
+# datetime_NY = datetime.now(tz_NY)
 IST = pytz.timezone('Asia/Kolkata')
 now = datetime.datetime.now(IST)
-#temp = now.strftime('%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=datetime.timezone.utc)
+
+
+# temp = now.strftime('%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=datetime.timezone.utc)
 
 # Create your views here.
 def index(request):
-
-    #attende = Attende()
+    # attende = Attende()
     form1 = AttendeFormIn()
     form2 = AttendeFormOut()
 
@@ -27,66 +28,84 @@ def index(request):
         form1 = AttendeFormIn(request.POST)
 
         if form1.is_valid():
+            print(form1)
             form1.save()
             return http.HttpResponseRedirect('')
-            #attende.intime = temp
-            #attende.outtime = temp
-            #attende.save()
+        else:
+            print("form1 not found")
+            # attende.intime = temp
+            # attende.outtime = temp
+            # attende.save()
 
     if request.method == 'POST' and 'out' in request.POST:
         form2 = AttendeFormOut(request.POST)
-        #up_req = request.POST.copy()
-        #up_req.update({'date_out_time': [datetime.now()]})
-        #up_req.update({'date_out_time': [now.strftime('%Y-%m-%d %H:%M:%S.%f')]})
-        #print(up_req)
+        # up_req = request.POST.copy()
+        # up_req.update({'date_out_time': [datetime.now()]})
+        # up_req.update({'date_out_time': [now.strftime('%Y-%m-%d %H:%M:%S.%f')]})
+        # print(up_req)
         if form2.is_valid():
-            #form2.date_out_time = (auto_now=True)
+            # form2.date_out_time = (auto_now=True)
             userid = request.POST.get('uid')
             '''try:
                 f = Attende.objects.get(uid = userid)
             except Attende.DoesNotExist:
                 return redirect('index')'''
-            #if Attende.objects.get(uid=userid):
-            #print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
+            # if Attende.objects.get(uid=userid):
+            # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
             try:
                 l = Attende.objects.filter(uid=userid).last()
                 lpk = l.pk
-                #print(lpk)
-                #print(type(lpk))
-                #now.strftime('%Y-%m-%d %H:%M:%S.%f')
-                #datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                Attende.objects.filter(id=lpk).update(date_out_time=now.strftime('%Y-%m-%d %H:%M:%S.%f'))
+                # print(lpk)
+                # print(type(lpk))
+                # now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
+                Attende.objects.filter(id=lpk).update(out_time=now.strftime('%H:%M:%S.%f'))
             except InDoesNotExist:
                 print("In required")
 
-            #form2.save()
+            # form2.save()
             return http.HttpResponseRedirect('')
-            #form2.save()
-            #Attende.objects.filter(fieldname="uid")
+            # form2.save()
+            # Attende.objects.filter(fieldname="uid")
     context = {'form1': form1, 'form2': form2}
     return render(request, 'logging/index.html', context)
+
 
 def details():
     data1 = Attende.objects.get(uid=userid)
 
+
 def attendence(request):
     return render(request, 'logging/attendence.html')
 
+
 def bydate(request):
-    return render(request, 'logging/bydate.html')
+    obj = []
+    if request.method == 'POST':
+        fromdate = request.POST.get('fromd')
+        print(fromdate)
+        todate = request.POST.get('tod')
+        print(todate)
+        try:
+            obj = Attende.objects.filter(date__range=[fromdate, todate])
+            print(obj)
+        except NotFound:
+            print("InvalidDate")
+    return render(request, 'logging/bydate.html', {'obj': obj})
+
 
 def id(request):
     form = AttendeFormOut()
-    ud=[]
+    ud = []
     if request.method == 'POST':
         form = AttendeFormOut(request.POST)
         if form.is_valid():
             userid = request.POST.get('uid')
             try:
                 udetails = Attende.objects.filter(uid=userid)
-                #print(udetails)
-                ud= list(udetails)
-                #print(ud)
+                # print(udetails)
+                ud = list(udetails)
+                # print(ud)
                 '''for u in ud:
                     print(u.uid)
                 for udetail in udetails:
@@ -97,8 +116,8 @@ def id(request):
             except NotFound:
                 print("IDNotFound")
 
-    #context = {'form': form, 'udetails': udetails}
-    return render(request, 'logging/id.html', {'ud': ud })
+    # context = {'form': form, 'udetails': udetails}
+    return render(request, 'logging/id.html', {'ud': ud})
     '''
                   {
                       'uid': udetails.uid,
@@ -107,8 +126,10 @@ def id(request):
                       'date_out_time': udetails.date_out_time
                   })'''
 
+
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
+
 
 def register(request):
     if request.method == 'POST':

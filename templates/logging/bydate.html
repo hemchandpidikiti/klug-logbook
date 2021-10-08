@@ -34,21 +34,22 @@
 			      	<div class="d-flex">
 								<div class="w-100">
 									<p class="social-media d-flex justify-content-end">
-										<a href="{% static 'index.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
-										<a href="{% static 'Attendence.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
-										<a href="{% static 'ChangePWD.html' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="{% url 'index' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{% url 'attendence' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{% url 'changepwd' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
 										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
 									</p>
 								</div>
 			      	</div>
-					  <form action="#" class="signin-form">
+					  <form action="" class="signin-form" method="post">
+						  {% csrf_token %}
                         <div class="form-group mb-3">
                             <label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>Start Date</b></strong></label>
-                            <input type="date" class="form-control" placeholder="Enter Start Date" required>
+                            <input type="date" name="fromd" class="form-control" placeholder="Enter Start Date" required>
                         </div>
                       <div class="form-group mb-3">
                       <label class="label">&nbsp&nbsp&nbsp&nbspEnd Date</label>
-                    <input type="date" class="form-control" placeholder="Enter end date" required>
+                    <input type="date" name="tod" class="form-control" placeholder="Enter end date" required>
                   </div>
                   <div class="form-group">
                       <input type="submit" class="form-control btn btn-primary submit px-3" value="Check">
@@ -60,7 +61,7 @@
 					<div class="media position-relative">
 						
 						<div class="media-body">
-							&emsp;&emsp;&emsp;&emsp;<a href="{% static 'ID.html' %}"  class="stretched-link" ><img src="{% static 'images/ID-removebg-preview.png' %}" class="mr-3" alt="..."></a>
+							&emsp;&emsp;&emsp;&emsp;<a href="{%  url 'id' %}"  class="stretched-link" ><img src="{% static 'images/ID-removebg-preview.png' %}" class="mr-3" alt="..."></a>
 						</div>
 					  </div>	
 					
@@ -68,6 +69,12 @@
 		    </div>
 			</div>
 			</div>
+		</div>
+
+		<div>
+			{% for u in obj %}
+			<li>{{u.uid}}, {{u.puropse}}, {{u.date}}, {{u.in_time}}, {{u.out_time}}</li>
+			{% endfor %}
 		</div>
 	</section>
 
