@@ -118,7 +118,7 @@ def id(request):
 
     # context = {'form': form, 'udetails': udetails}
     if len(ud) != 0:
-        return render(request, 'logging/print.html', {'ud': ud})
+        return render(request, 'logging/print.html', {'ud': ud, 'userid': userid})
     return render(request, 'logging/id.html')
     '''
                   {
