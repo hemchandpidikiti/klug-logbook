@@ -4,15 +4,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django import http
 from .forms import AttendeFormIn, AttendeFormOut
 from .models import Attende
-
 import pytz
 # from datetime import datetime
 import datetime
 
-tz_NY = pytz.timezone('Asia/Kolkata')
+#tz_NY = pytz.timezone('Asia/Kolkata')
 # datetime_NY = datetime.now(tz_NY)
-IST = pytz.timezone('Asia/Kolkata')
-now = datetime.datetime.now(IST)
+#IST = pytz.timezone('Asia/Kolkata')
+#now1 = datetime.datetime.now(IST)
+#print(now)
 
 
 # temp = now.strftime('%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=datetime.timezone.utc)
@@ -22,6 +22,8 @@ def index(request):
     # attende = Attende()
     form1 = AttendeFormIn()
     form2 = AttendeFormOut()
+    IST = pytz.timezone('Asia/Kolkata')
+    now1 = datetime.datetime.now(IST)
 
     if request.method == 'POST' and 'in' in request.POST:
 
@@ -59,7 +61,8 @@ def index(request):
                 # print(type(lpk))
                 # now.strftime('%Y-%m-%d %H:%M:%S.%f')
                 # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                Attende.objects.filter(id=lpk).update(out_time=now.strftime('%H:%M:%S.%f'))
+                now1 = datetime.datetime.now(IST)
+                Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
             except InDoesNotExist:
                 print("In required")
 
@@ -91,7 +94,9 @@ def bydate(request):
             #print(obj)
         except NotFound:
             print("InvalidDate")
-    return render(request, 'logging/bydate.html', {'obj': obj})
+    if len(obj) != 0:
+        return render(request, 'logging/print.html', {'obj': obj, 'fromdate': fromdate, 'todate': todate})
+    return render(request, 'logging/bydate.html')
 
 
 def id(request):
