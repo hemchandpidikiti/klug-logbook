@@ -28,7 +28,7 @@ def index(request):
         form1 = AttendeFormIn(request.POST)
 
         if form1.is_valid():
-            print(form1)
+            #print(form1)
             form1.save()
             return http.HttpResponseRedirect('')
         else:
@@ -83,12 +83,12 @@ def bydate(request):
     obj = []
     if request.method == 'POST':
         fromdate = request.POST.get('fromd')
-        print(fromdate)
+        #print(fromdate)
         todate = request.POST.get('tod')
-        print(todate)
+        #print(todate)
         try:
             obj = Attende.objects.filter(date__range=[fromdate, todate])
-            print(obj)
+            #print(obj)
         except NotFound:
             print("InvalidDate")
     return render(request, 'logging/bydate.html', {'obj': obj})
@@ -117,7 +117,9 @@ def id(request):
                 print("IDNotFound")
 
     # context = {'form': form, 'udetails': udetails}
-    return render(request, 'logging/id.html', {'ud': ud})
+    if len(ud) != 0:
+        return render(request, 'logging/print.html', {'ud': ud})
+    return render(request, 'logging/id.html')
     '''
                   {
                       'uid': udetails.uid,
@@ -126,6 +128,9 @@ def id(request):
                       'date_out_time': udetails.date_out_time
                   })'''
 
+
+def print(request):
+    return render(request, 'logging/print.html')
 
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
