@@ -1,50 +1,26 @@
-<html>
-    <head>
-        {% load static %}
-  	<title>LOG BOOK</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	
-
-	<link href="{%static 'fonts\fonts.css' %}" rel="stylesheet">
-	<link href="{%static 'fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css' %}" rel="stylesheet">
-	
-	<link rel="stylesheet" href="{%static 'css/style.css' %}">
-    </head>
-    <body>
-        <div class="container">
-            <div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<br><br><img src="{%static 'images/KLUG.png' %}" class="rounded mx-auto d-block" alt="KLUG" style="height: 100px;width: 200px;">
-					<br>
-					<h2 class="heading-section">LOGBOOK</h2>
-				</div>
-			</div>
-        <div class="col-sm-4 col-md-12">
-        <table class="table table-bordered">
-            <thead class="thead-light">
-              <tr>
-                <th>id</th>
-                <th>purpose</th>
-                <th>date</th>
-            <th>In Time</th>
-            <th>Out Time</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for u in ud %}
-              <tr>
-                <td>{{u.uid}}</td>
-                <td>{{u.purpose}}</td>
-                <td>{{u.date}}</td>
-            <td>{{u.in_time}}</td>
-            <td>{{u.out_time}}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-          </div>
-        </div>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Print</title>
+  </head>
+  <body>
+  {% if userid != None %}
+  <h2>Log Report on student {{userid}}</h2>
+  <div>
+    {% for u in ud %}
+      <li>{{u.uid}}, {{u.purpose}}, {{u.date}}, {{u.in_time}}, {{u.out_time}}</li>
+    {% endfor %}
+  </div>
+  {% else %}
+  <h2>Log Report during {{fromdate}} to {{todate}}</h2>
+  <div>
+    {% for u in obj %}
+      <li>{{u.uid}}, {{u.purpose}}, {{u.date}}, {{u.in_time}}, {{u.out_time}}</li>
+    {% endfor %}
+  </div>
+  {% endif %}
+  </body>
 </html>
