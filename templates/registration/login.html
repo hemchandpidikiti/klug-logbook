@@ -1,29 +1,101 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-</head>
-<body>
-    {% if form.errors %}
-    <p>There's is something wrong with what you entered!</p>
-    {% endif %}
+  <head>
+	{% load static %}
+  	<title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    {% if next %}
-    <p>Hey, you can't access that page</p>
-    {% endif %}
+	
 
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
+	<link rel="stylesheet" href="{%static 'fonts\fonts.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{%static 'fonts\font-awesome-4.7.0\font-awesome-4.7.0\css\font-awesome.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{%static 'css/bootstrap.min.css' %}">
+	
+	<link rel="stylesheet" href="{%static 'css/style.css' %}">
+	</head>
+	<body>
+	
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<img src="{%static 'images\KLUG.png' %}" class="rounded mx-auto d-block" alt="KLUG" style="height: 100px;width: 200px;">
+					<br>
+					<h2 class="heading-section">LOGBOOK</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-12 col-lg-10">
+					<div class="wrap d-md-flex">
+						
+						
+						<div class="login-wrap p-4 p-lg-5">
+			      	<div class="d-flex">
+								<div class="w-100">
+									<p class="social-media d-flex justify-content-end">
+										<a href="{% url 'index' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-home"></span></a>
+										<a href="{% url 'attendence' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-print"></span></a>
+										<a href="{% url 'changepwd' %}" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-cog"></span></a>
+										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-sign-out"></span></a>
+									</p>
+								</div>
+			      	</div>
+							<form action="" class="signin-form" method="post">
+								{% csrf_token %}
+			      		<div class="form-group mb-3">
+			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>Name</b></strong></label>
+			      			<input type="text" name="uid" class="form-control" placeholder="Enter Name" required>
+			      		</div>
+                          <div class="form-group mb-3">
+			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>User Id</b></strong></label>
+			      			<input type="number" name="uid" class="form-control" placeholder="Enter User Name" required>
+			      		</div>
+		            	<div class="form-group mb-3">
+		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
+		              <input type="text" name="Password" maxlength="12" class="form-control" placeholder="Enter Password" required>
+                      <div class="form-group mb-3">
+		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Conform Password</b></label>
+		              <input type="text" name="Password" maxlength="12" class="form-control" placeholder="Conform Password" required>
+		            </div>                    
+		            <div class="form-group">
+		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Register" name="in">
+		            </div>
+		            
+		          </form>
+		        </div>
+				<div class="text-wrap p-4 p-lg-5  d-flex align-items-center order-md-last">
+							
+					<div class="text w-100">
+						
+						<form action="" class="signin-form" method="post">
+							{% csrf_token %}
+							<div class="form-group mb-3">
+								
+								<label class="label">&nbsp&nbsp&nbsp&nbsp<b>User Id</b></label>
+								<input type="text" number="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter User Name" required>
+							</div>
+                            <div class="form-group mb-3">
+                                <label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
+                              <input type="text" name="Password" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter Password" required>
+                              </div>
+						<input type="submit"  class="btn btn-white btn-outline-white" value="Log In" name="out">
+					</form>
+						
+					</div>
+                    
+		  </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-        <p>Username: {{ form.username }}</p>
-        <p>Password: {{ form.password }}</p>
+	<script src="{%static 'js/jquery.min.js' %}"></script>
+  <script src="{%static 'js/popper.js' %}"></script>
+  <script src="{%static 'js/bootstrap.min.js' %}"></script>
+  <script src="{%static 'js/main.js' %}"></script>
 
-        <p><input type="submit" value="login"></p>
-        <input type="hidden" name="next" value="{{ next }}">
-    </form>
-</body>
+	</body>
 </html>
+
