@@ -17,6 +17,7 @@
 	<body>
 	
 	<section class="ftco-section">
+		{% include 'logging/intimate.html' %}
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6 text-center mb-5">
@@ -83,6 +84,13 @@
   <script src="{%static 'js/popper.js' %}"></script>
   <script src="{%static 'js/bootstrap.min.js' %}"></script>
   <script src="{%static 'js/main.js' %}"></script>
+	<script>
+		setTimeout(function(){
+			if ($('#msg').length > 0){
+				$('#msg').remove();
+			}
+		}, 2000)
+	</script>
 
 	</body>
 </html>

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django import http
@@ -32,6 +33,7 @@ def index(request):
         if form1.is_valid():
             #print(form1)
             form1.save()
+            messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
             print("form1 not found")
@@ -63,6 +65,7 @@ def index(request):
                 # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
                 now1 = datetime.datetime.now(IST)
                 Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                messages.success(request, 'You are OUT')
             except InDoesNotExist:
                 print("In required")
 
@@ -136,6 +139,9 @@ def id(request):
 
 def print(request):
     return render(request, 'logging/print.html')
+
+def intimate(request):
+    return render(request, 'logging/intimate.html')
 
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
