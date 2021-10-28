@@ -68,7 +68,7 @@
 							<div class="form-group mb-3">
 								
 								<label class="label">&nbsp&nbsp&nbsp&nbspID Number</label>
-								<input id="IDN" type="number" name="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter ID Number" required>
+								<input id="IDN1" type="number" name="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter ID Number" required>
 								<span id = "warning2" style="color:red"> </span>
 							</div>
 						<input type="submit" style="width: 100%;" class="btn btn-white btn-outline-white" value="Log Out" name="out">
@@ -102,9 +102,10 @@
 			}
 		}
 		function verifyID2(){
-			var idn=document.getElementById("IDN").value;
-			var idn_len=(''+idn).length;
-			if(idn_len<4){
+			var idn1=document.getElementById("IDN1").value;
+			var idn_len1=(''+idn1).length;
+			
+			if(idn_len1<4){
 				document.getElementById("warning2").innerHTML="please enter above 4 characters in the ID field!!"
 			}
 		}
