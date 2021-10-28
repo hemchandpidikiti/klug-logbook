@@ -41,7 +41,7 @@
 									</p>
 								</div>
 			      	</div>
-							<form action="" class="signin-form" method="post" onsubmit="return verifypwd()" onclick="return isEmail(email)">
+							<form action="" class="signin-form" method="post" onsubmit="return verifypwd()" onclick="return isEmail()">
 								{% csrf_token %}
 			      		<div class="form-group mb-3">
 			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>Name</b></strong></label>
@@ -118,9 +118,7 @@
 				return false; 
      			 
 			}
-			else{
-				alert("Successful");
-			}
+			
 		}
 		$('#pwd, #cpwd').on('keyup', function () {
   if ($('#pwd').val() == $('#cpwd').val()) {
@@ -133,7 +131,7 @@
 		<script>
 			function isEmail() {
 				var em=document.getElementById("em").value;
-  				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-]))+\.([a-zA-Z0-9]{2,4})+$/;
   				return regex.test(em);
 			}				
 		</script>
