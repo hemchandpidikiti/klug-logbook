@@ -45,12 +45,12 @@
 								{% csrf_token %}
 			      		<div class="form-group mb-3">
 			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>Name</b></strong></label>
-			      			<input type="text" name="uid" class="form-control" placeholder="Enter Name" required>
+			      			<input type="text" name="name" class="form-control" placeholder="Enter Name" required>
 			      		</div>
 						  <div class="form-group mb-3">
 							<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>EMAIL</b></strong></label>
 							<span id = "warning3" style="color:red"> </span>
-							<input id="em" type="email" name="uid" class="form-control" placeholder="Enter email" required>
+							<input id="em" type="email" name="email" class="form-control" placeholder="Enter email" required>
 						</div>
                           <div class="form-group mb-3">
 			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>User Id</b></strong></label>
@@ -59,12 +59,12 @@
 			      		</div>
 		            	<div class="form-group mb-3">
 		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
-		              <input id="pwd" type="password" name="Password" maxlength="12" class="form-control" placeholder="Enter Password" required>
+		              <input id="pwd" type="password" name="Password1" maxlength="12" class="form-control" placeholder="Enter Password" required>
 					  <br>
                       <div class="form-group mb-3">
 		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Confirm Password</b></label>
 						<span id = "message" style="color:red"> </span> <br>
-		              <input id="cpwd" type="password" name="Password" maxlength="12" class="form-control" placeholder="Conform Password" required>
+		              <input id="cpwd" type="password" name="Password2" maxlength="12" class="form-control" placeholder="Conform Password" required>
 		            </div>                    
 		            <div class="form-group">
 		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Register" name="in">
@@ -113,20 +113,20 @@
 			var pw=document.getElementById("pwd").value;
 			var cpw=document.getElementById("cpwd").value;
 			if(pw==""){
-				document.getElementById("pwd").innerHTML = "**Fill the password please!";  
-     			return false;  
+				document.getElementById("pwd").innerHTML = "**Fill the password please!";
+     			return false;
 			}
 			else if(pw!=cpw){
 				document.getElementById("message").innerText="Type the same password";
-				return false; 
-     			 
+				return false;
+
 			}
-			
+
 		}
 		$('#pwd, #cpwd').on('keyup', function () {
   if ($('#pwd').val() == $('#cpwd').val()) {
     $('#message').html('Matching').css('color', 'green');
-  } else 
+  } else
     $('#message').html('Not Matching').css('color', 'red');
 });
 
@@ -142,8 +142,8 @@
 					  document.getElementById("warning3").innerHTML="Enter a valid mail ex:abc@domain.com";
 					  return false;
 				  }
-				  
-			}				
+
+			}
 		</script>
 		<script>
 			function verifyID1(){
@@ -157,7 +157,7 @@
 		function verifyID2(){
 			var idn1=document.getElementById("UID2").value;
 			var idn_len1=(''+idn1).length;
-			
+
 			if(idn_len1<4){
 				document.getElementById("warning2").innerHTML="please enter valid ID (length>=4)!!";
 				return false;
@@ -166,4 +166,3 @@
 		</script>
 	</body>
 </html>
-
