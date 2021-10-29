@@ -8,6 +8,7 @@ from .models import Attende
 import pytz
 # from datetime import datetime
 import datetime
+import csv
 
 #tz_NY = pytz.timezone('Asia/Kolkata')
 # datetime_NY = datetime.now(tz_NY)
@@ -36,7 +37,8 @@ def index(request):
             messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
-            print("form1 not found")
+            messages.error(request, 'ENTER CORRECT ID')
+            #print("form1 not found")
             # attende.intime = temp
             # attende.outtime = temp
             # attende.save()
@@ -56,7 +58,7 @@ def index(request):
                 return redirect('index')'''
             # if Attende.objects.get(uid=userid):
             # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
-            try:
+            if userid:
                 l = Attende.objects.filter(uid=userid).last()
                 lpk = l.pk
                 # print(lpk)
@@ -66,13 +68,38 @@ def index(request):
                 now1 = datetime.datetime.now(IST)
                 Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
                 messages.success(request, 'You are OUT')
-            except InDoesNotExist:
-                print("In required")
+            else:
+                messages.error(request, 'ID not exist')
 
             # form2.save()
             return http.HttpResponseRedirect('')
             # form2.save()
             # Attende.objects.filter(fieldname="uid")
+
+    f = open(".\\static\\csv\\rfid.csv")
+    csvreader = csv.reader(f)
+    h = next(csvreader)
+    #print(h)
+    #rows = []
+    #for row in csvreader:
+        #rows.append(row)
+    #messages.success(request, h)
+    f.close()
+
+    f1 = open(".\\static\\csv\\master.csv")
+    csvreader = csv.reader(f1)
+    h1 = next(csvreader)
+    for i in h:
+        k = i
+    rows = []
+    for r in csvreader:
+        #r = row[0].split('\t')
+        if r[0] == k:
+            rows.append(r[1])
+    for row in rows:
+        messages.success(request, row)
+    f1.close()
+
     context = {'form1': form1, 'form2': form2}
     return render(request, 'logging/index.html', context)
 
