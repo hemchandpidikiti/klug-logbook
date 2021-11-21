@@ -147,6 +147,10 @@ def intimate(request):
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
 
+def auth_logout(request):
+    logout(request)
+    return redirect('auth_login')
+
 def auth_login(request):
     form1 = CreateUserForm()
     #form2 = AttendeFormOut()
@@ -187,10 +191,8 @@ def auth_login(request):
             login(request, user)
             messages.info(request, f"You are now logged in as {username}.")
             return redirect('index')
-        #else:
-            #messages.error(request, "Invalid username or password.")
-    else:
-        messages.error(request, "Invalid username or password.")
+        else:
+            messages.info(request, "username or password is incorrect")
 
     context = {'form1': form1}
     return render(request, 'registration/login.html', context)
