@@ -58,7 +58,7 @@
 							<span id = "warning3" style="color:red"> </span>
 							<input id="em" type="email" name="email" class="form-control" placeholder="Enter email" required>
 						</div>
-                          
+
 		            	<div class="form-group mb-3">
 		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
 		              <input id="pwd" type="password" name="Password1" maxlength="12" class="form-control" placeholder="Enter Password" required>
@@ -67,14 +67,14 @@
 		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Confirm Password</b></label>
 						<span id = "message" style="color:red"> </span> <br>
 		              <input id="cpwd" type="password" name="Password2" maxlength="12" class="form-control" placeholder="Conform Password" required>
-		            </div>                    
-		            <div class="form-group">
-		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Register" name="in">
 		            </div>
-		            
-		          </form>
-		        </div>
+		            <div class="form-group">
+		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="Register" name="reg">
+		            </div>
 
+
+		        </div>
+</form>
 				</div>
 					<div class="text-wrap p-4 p-lg-5  d-flex align-items-center order-md-last">
 
@@ -86,16 +86,16 @@
 
 								<label class="label">&nbsp&nbsp&nbsp&nbsp<b>User Id</b></label>
 								<span id = "warning2" style="color:red"> </span>
-								<input type="number" id="UID2" number="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter User ID" required>
+								<input type="text" id="username" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter User ID" required>
 							</div>
                             <div class="form-group mb-3">
                                 <label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
-                              <input type="password" name="Password" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter Password" required>
+                              <input type="password" name="password" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter Password" required>
                               </div>
 							<br>
-						<input type="submit"  style="width: 100%;" class="btn btn-white btn-outline-white" value="Log In" name="out">
+						<input type="submit"  style="width: 100%;" class="btn btn-white btn-outline-white" value="Log In" name="li">
 					</form>
-
+{{form.errors}}
 					</div>
 
 		  </div>

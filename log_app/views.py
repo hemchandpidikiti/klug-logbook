@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django import http
-from .forms import AttendeFormIn, AttendeFormOut
+from .forms import AttendeFormIn, AttendeFormOut, CreateUserForm
 from .models import Attende
 import pytz
 # from datetime import datetime
 import datetime
-import csv
 
 #tz_NY = pytz.timezone('Asia/Kolkata')
 # datetime_NY = datetime.now(tz_NY)
@@ -37,8 +37,7 @@ def index(request):
             messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
-            messages.error(request, 'ENTER CORRECT ID')
-            #print("form1 not found")
+            print("form1 not found")
             # attende.intime = temp
             # attende.outtime = temp
             # attende.save()
@@ -58,7 +57,7 @@ def index(request):
                 return redirect('index')'''
             # if Attende.objects.get(uid=userid):
             # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
-            if userid:
+            try:
                 l = Attende.objects.filter(uid=userid).last()
                 lpk = l.pk
                 # print(lpk)
@@ -68,38 +67,13 @@ def index(request):
                 now1 = datetime.datetime.now(IST)
                 Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
                 messages.success(request, 'You are OUT')
-            else:
-                messages.error(request, 'ID not exist')
+            except InDoesNotExist:
+                print("In required")
 
             # form2.save()
             return http.HttpResponseRedirect('')
             # form2.save()
             # Attende.objects.filter(fieldname="uid")
-
-    f = open(".\\static\\csv\\rfid.csv")
-    csvreader = csv.reader(f)
-    h = next(csvreader)
-    #print(h)
-    #rows = []
-    #for row in csvreader:
-        #rows.append(row)
-    #messages.success(request, h)
-    f.close()
-
-    f1 = open(".\\static\\csv\\master.csv")
-    csvreader = csv.reader(f1)
-    h1 = next(csvreader)
-    for i in h:
-        k = i
-    rows = []
-    for r in csvreader:
-        #r = row[0].split('\t')
-        if r[0] == k:
-            rows.append(r[1])
-    for row in rows:
-        messages.success(request, row)
-    f1.close()
-
     context = {'form1': form1, 'form2': form2}
     return render(request, 'logging/index.html', context)
 
@@ -173,21 +147,71 @@ def intimate(request):
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
 
+def auth_login(request):
+    form1 = CreateUserForm()
+    #form2 = AttendeFormOut()
+
+    if request.method == 'POST' and 'reg' in request.POST:
+
+        form1 = CreateUserForm(request.POST)
+
+        if form1.is_valid():
+            form1.save()
+            user = request.POST.get('username')
+
+            '''profile = profile_form.save(commit=False)
+            profile.user = user
+
+            userid = profile_form.cleaned_data.get('uid')
+            print(userid)
+            profile.save()
+
+            password = form1.cleaned_data.get('password1')
+            print(password)
+            user = authenticate(uid=uid, password=password)
+
+            login(request, user)'''
+            messages.success(request, 'Registration successful ' + user)
+            return render(request, 'registration/login.html')
+        else:
+            form1 = CreateUserForm()
+            messages.error(request, "Unsuccessful registration. Invalid information.")
+
+    if request.method == 'POST' and 'li' in request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.info(request, f"You are now logged in as {username}.")
+            return redirect('index')
+        #else:
+            #messages.error(request, "Invalid username or password.")
+    else:
+        messages.error(request, "Invalid username or password.")
+
+    context = {'form1': form1}
+    return render(request, 'registration/login.html', context)
 
 def register(request):
+    return render(request, 'registration/register.html')
+    '''form = UserCreationForm
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        regForm = UserCreationForm(request.POST)
 
-        if form.is_valid():
-            form.save()
+        if regForm.is_valid():
+            regForm.save()
+            messages.success(request, 'User has been registered!!!')
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
 
             user = authenticate(username=username, password=password)
             login(request, user)
-            return redirect('index')
+            return redirect('')
     else:
         form = UserCreationForm()
 
-    context = {'form': form}
-    return render(request, 'registration/register.html', context)
+    context = {'form': form}'''
+
