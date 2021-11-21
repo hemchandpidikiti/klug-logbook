@@ -43,6 +43,12 @@
 			      	</div>
 							<form action="" class="signin-form" method="post" onsubmit="return verifypwd(),isEmail(),verifyID1()">
 								{% csrf_token %}
+						<div class="form-group mb-3">
+							<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>User Id</b></strong></label>
+							<span id = "warning1" style="color:red"> </span>
+							<input type="text" id="UID1" name="uid" class="form-control" placeholder="Enter Student ID or Employee ID" required>
+							&nbsp&nbsp&nbsp&nbsp<span class="helptext">Input should be your ID number.</span>
+						</div>
 			      		<div class="form-group mb-3">
 			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>Name</b></strong></label>
 			      			<input type="text" name="name" class="form-control" placeholder="Enter Name" required>
@@ -52,11 +58,7 @@
 							<span id = "warning3" style="color:red"> </span>
 							<input id="em" type="email" name="email" class="form-control" placeholder="Enter email" required>
 						</div>
-                          <div class="form-group mb-3">
-			      			<label class="label">&nbsp&nbsp&nbsp&nbsp<strong><b>User Id</b></strong></label>
-							  <span id = "warning1" style="color:red"> </span>
-			      			<input type="number" id="UID1" name="uid" class="form-control" placeholder="Enter User ID" required>
-			      		</div>
+                          
 		            	<div class="form-group mb-3">
 		            	<label class="label">&nbsp&nbsp&nbsp&nbsp <b>Password</b></label>
 		              <input id="pwd" type="password" name="Password1" maxlength="12" class="form-control" placeholder="Enter Password" required>
