@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django import http
 from .forms import AttendeFormIn, AttendeFormOut, CreateUserForm
 from .models import Attende
@@ -20,6 +21,7 @@ import datetime
 # temp = now.strftime('%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=datetime.timezone.utc)
 
 # Create your views here.
+@login_required
 def index(request):
     # attende = Attende()
     form1 = AttendeFormIn()
@@ -34,6 +36,11 @@ def index(request):
         if form1.is_valid():
             #print(form1)
             form1.save()
+            '''f = form1.save(commit=False)
+            print(request.User.username)
+            print(request.user.username)
+            f.room_name = request.User.username
+            f.save()'''
             messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
@@ -81,11 +88,11 @@ def index(request):
 def details():
     data1 = Attende.objects.get(uid=userid)
 
-
+@login_required
 def attendence(request):
     return render(request, 'logging/attendence.html')
 
-
+@login_required
 def bydate(request):
     obj = []
     if request.method == 'POST':
@@ -102,7 +109,7 @@ def bydate(request):
         return render(request, 'logging/print.html', {'obj': obj, 'fromdate': fromdate, 'todate': todate})
     return render(request, 'logging/bydate.html')
 
-
+@login_required
 def id(request):
     form = AttendeFormOut()
     ud = []
@@ -137,16 +144,19 @@ def id(request):
                       'date_out_time': udetails.date_out_time
                   })'''
 
-
+@login_required
 def print(request):
     return render(request, 'logging/print.html')
 
+@login_required
 def intimate(request):
     return render(request, 'logging/intimate.html')
 
+@login_required
 def changepwd(request):
     return render(request, 'logging/changepwd.html')
 
+@login_required
 def auth_logout(request):
     logout(request)
     return redirect('auth_login')

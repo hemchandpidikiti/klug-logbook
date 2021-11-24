@@ -10,5 +10,6 @@ urlpatterns = [
     path('print/', views.print, name='print'),
     path('intimate/', views.intimate, name='intimate'),
     path('accounts/register/', views.register, name='register'),
-    path('accounts/login/', views.auth_login, name='auth_login')
+    path('accounts/login/', views.auth_login, name='auth_login'),
+    path('accounts/logout/', views.auth_logout, name='auth_logout')
 ]
