@@ -1,7 +1,10 @@
 {% if messages %}
     {% for message in messages %}
-        <div class="alert {{ messages.tags }} m-2" id="msg" role="alert">
-            {{ message}}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <p style="font-weight: bold; color:green;"> {{ message}} </p>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <p style="font-weight: bold; color:red;"> {{ message}} </p>
         </div>
+        {% endif %}
     {% endfor %}
 {% endif %}

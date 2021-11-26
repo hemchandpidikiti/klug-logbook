@@ -44,7 +44,7 @@ def index(request):
             messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
-            print("form1 not found")
+            messages.error(request,'Enter correct User ID')
             # attende.intime = temp
             # attende.outtime = temp
             # attende.save()
@@ -74,8 +74,9 @@ def index(request):
                 now1 = datetime.datetime.now(IST)
                 Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
                 messages.success(request, 'You are OUT')
-            except InDoesNotExist:
-                print("In required")
+                
+            except:
+                messages.error(request,'Enter correct User ID')
 
             # form2.save()
             return http.HttpResponseRedirect('')
@@ -172,7 +173,12 @@ def auth_login(request):
         if form1.is_valid():
             form1.save()
             user = request.POST.get('username')
-
+            password=request.POST.get('password1')
+            confirm_password=request.POST.get('password2')
+            if password != confirm_password:
+                raise form1.ValidationError(
+                    "password and confirm_password does not match"
+                )
             '''profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -185,6 +191,7 @@ def auth_login(request):
             user = authenticate(uid=uid, password=password)
 
             login(request, user)'''
+
             messages.success(request, 'Registration successful ' + user)
             return render(request, 'registration/login.html')
         else:
@@ -199,10 +206,10 @@ def auth_login(request):
 
         if user is not None:
             login(request, user)
-            messages.info(request, f"You are now logged in as {username}.")
+            messages.success(request, f"You are now logged in as {username}.")
             return redirect('index')
         else:
-            messages.info(request, "username or password is incorrect")
+            messages.error(request, "username or password is incorrect")
 
     context = {'form1': form1}
     return render(request, 'registration/login.html', context)
