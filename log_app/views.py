@@ -173,13 +173,13 @@ def auth_login(request):
         if form1.is_valid():
             form1.save()
             user = request.POST.get('username')
-            password=request.POST.get('password1')
-            confirm_password=request.POST.get('password2')
-            if password != confirm_password:
+           
+            
+            '''if password != confirm_password:
                 raise form1.ValidationError(
                     "password and confirm_password does not match"
                 )
-            '''profile = profile_form.save(commit=False)
+            profile = profile_form.save(commit=False)
             profile.user = user
 
             userid = profile_form.cleaned_data.get('uid')
@@ -195,8 +195,13 @@ def auth_login(request):
             messages.success(request, 'Registration successful ' + user)
             return render(request, 'registration/login.html')
         else:
-            form1 = CreateUserForm()
-            messages.error(request, "Unsuccessful registration. Invalid information.")
+            password=request.POST.get('password1')
+            confirm_password=request.POST.get('password2')
+            if password != confirm_password:
+                messages.error(request, "Password do not match")
+            else:
+                form1 = CreateUserForm()
+                messages.error(request, "Unsuccessful registration. Invalid information.")
 
     if request.method == 'POST' and 'li' in request.POST:
         username = request.POST.get('username')
