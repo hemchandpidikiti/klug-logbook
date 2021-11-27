@@ -35,12 +35,10 @@ def index(request):
 
         if form1.is_valid():
             #print(form1)
-            form1.save()
-            '''f = form1.save(commit=False)
-            print(request.User.username)
-            print(request.user.username)
-            f.room_name = request.User.username
-            f.save()'''
+            f1 = form1.save(commit=False)
+            ron = request.user
+            f1.room_name = ron.username
+            f1.save()
             messages.success(request, 'You are IN')
             return http.HttpResponseRedirect('')
         else:
@@ -58,6 +56,8 @@ def index(request):
         if form2.is_valid():
             # form2.date_out_time = (auto_now=True)
             userid = request.POST.get('uid')
+            ron = request.user
+            rmn = ron.username
             '''try:
                 f = Attende.objects.get(uid = userid)
             except Attende.DoesNotExist:
@@ -65,18 +65,30 @@ def index(request):
             # if Attende.objects.get(uid=userid):
             # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
             try:
-                l = Attende.objects.filter(uid=userid).last()
+                l = Attende.objects.filter(uid=userid, room_name=rmn).last()
                 lpk = l.pk
-                # print(lpk)
+                #print(lpk)
+
+                nvv = Attende.objects.filter(id=lpk, out_time__isnull=True)
+                #print(nvv)
+                for i in nvv:
+                    #print(i)
+                    nvvpk = i.pk
+                    #print(nvvpk)
+
+                '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
+                nvpk = nv.pk
+                print(nvpk)'''
                 # print(type(lpk))
                 # now.strftime('%Y-%m-%d %H:%M:%S.%f')
                 # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                now1 = datetime.datetime.now(IST)
-                Attende.objects.filter(id=lpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
-                messages.success(request, 'You are OUT')
+                if nvvpk:
+                    now1 = datetime.datetime.now(IST)
+                    Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                    messages.success(request, 'You are OUT')
                 
             except:
-                messages.error(request,'Enter correct User ID')
+                messages.error(request, 'Your IN 404')
 
             # form2.save()
             return http.HttpResponseRedirect('')
@@ -101,8 +113,10 @@ def bydate(request):
         #print(fromdate)
         todate = request.POST.get('tod')
         #print(todate)
+        ron = request.user
+        rmn = ron.username
         try:
-            obj = Attende.objects.filter(date__range=[fromdate, todate])
+            obj = Attende.objects.filter(date__range=[fromdate, todate], room_name=rmn)
             #print(obj)
         except NotFound:
             print("InvalidDate")
@@ -118,8 +132,10 @@ def id(request):
         form = AttendeFormOut(request.POST)
         if form.is_valid():
             userid = request.POST.get('uid')
+            ron = request.user
+            rmn = ron.username
             try:
-                udetails = Attende.objects.filter(uid=userid)
+                udetails = Attende.objects.filter(uid=userid, room_name=rmn)
                 # print(udetails)
                 ud = list(udetails)
                 # print(ud)
@@ -146,7 +162,7 @@ def id(request):
                   })'''
 
 @login_required
-def print(request):
+def data_print(request):
     return render(request, 'logging/print.html')
 
 @login_required

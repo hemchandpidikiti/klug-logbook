@@ -1,11 +1,14 @@
 from django.db import models
+#from django.conf import settings
 from django.contrib.auth.models import User, AbstractUser, AbstractBaseUser, BaseUserManager, UserManager
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 
 # Create your models here.
 class Attende(models.Model):
-    #room_name = models.CharField(max_length=4, blank=False, default='C424')
+    #User = settings.AUTH_USER_MODEL
+    #user = models.ForeignKey(User, null=True)
+    room_name = models.CharField(max_length=12)
     uid = models.IntegerField(validators=[MinValueValidator(1000)], blank=False)
     purpose = models.CharField(max_length=12, blank=False)
     date = models.DateField(auto_now_add=True)
