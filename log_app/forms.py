@@ -32,17 +32,20 @@ class CreateUserForm(UserCreationForm):
             'username': TextInput(attrs={
                 'class': "form-control",
                 'style': 'width: 100%;',
-                'placeholder': 'Enter Student ID or Employee ID'
+                'placeholder': 'Enter Student ID or Employee ID',
+                
                 }),
             'first_name': TextInput(attrs={
                 'class': "form-control", 
                 'style': 'width: 100%;',
-                'placeholder': 'User Name'
+                'placeholder': 'User Name',
+                'required':'True'
                 }),
             'email': EmailInput(attrs={
                 'class': "form-control", 
                 'style': 'width: 100%;',
-                'placeholder': 'Enter Email'
+                'placeholder': 'Enter Email',
+                'required':'True'
                 })
                 
         }

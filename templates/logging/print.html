@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,6 +28,7 @@
     </div>
   {% if userid != None %}
   <div class="container col-sm-4 col-md-8" id="print">
+    <div class="text-center"><b></b><h4 style="color:blue;">{{rmn}}</h4></b></div>
     <div class="text-center"><h4 style="color:blue;">Log Report on student {{userid}}</h4></div>
     <table class="table">
       <thead class="thead-light">
@@ -54,9 +55,11 @@
     </div>
   </div><br>
   {% else %}
-  <div class="text-center"><h4 style="color:blue;">Log Report during {{fromdate}} to {{todate}}</h4>
+  
   <div class="container col-sm-4 col-md-8" id="print">
-  <table class="table table-striped">
+    <div class="text-center"><b></b><h4 style="color:blue;">{{rmn}}</h4></b></div>
+  <div class="text-center"><h4 style="color:blue;">Log Report during {{fromdate}} to {{todate}}</h4></div>
+  <table class="table">
     <thead class="thead-light">
     <tr>
       <th>id</th>

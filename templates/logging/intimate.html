@@ -1,9 +1,9 @@
 {% if messages %}
     {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-            <p style="font-weight: bold; color:green;"> {{ message}} </p>
+            <p style="font-weight: bold; color:green;" id="msg"> {{ message}} </p>
         {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <p style="font-weight: bold; color:red;"> {{ message}} </p>
+        <p style="font-weight: bold; color:red;" id="msg"> {{ message}} </p>
         </div>
         {% endif %}
     {% endfor %}

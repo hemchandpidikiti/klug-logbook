@@ -121,7 +121,7 @@ def bydate(request):
         except NotFound:
             print("InvalidDate")
     if len(obj) != 0:
-        return render(request, 'logging/print.html', {'obj': obj, 'fromdate': fromdate, 'todate': todate})
+        return render(request, 'logging/print.html', {'obj': obj, 'fromdate': fromdate, 'todate': todate, 'rmn': rmn})
     return render(request, 'logging/bydate.html')
 
 @login_required
@@ -151,7 +151,7 @@ def id(request):
 
     # context = {'form': form, 'udetails': udetails}
     if len(ud) != 0:
-        return render(request, 'logging/print.html', {'ud': ud, 'userid': userid})
+        return render(request, 'logging/print.html', {'ud': ud, 'userid': userid, 'rmn': rmn})
     return render(request, 'logging/id.html')
     '''
                   {
