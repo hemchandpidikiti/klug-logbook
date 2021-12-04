@@ -59,7 +59,7 @@
 								<label class="label">&nbsp&nbsp&nbsp&nbspID Number</label>
 								<input type="number" name="uid" style="background-color:#e6e6e6;" class="form-control" placeholder="Enter ID Number" required>
 							</div>
-						<input type="submit" style="width: 100%;" onclick="openModal()" class="btn btn-white btn-outline-white btn-block btn-lg" data-toggle="modal" data-target="#myModal" value="Check">
+						<input type="submit" style="width: 100%;"  class="btn btn-white btn-outline-white btn-block btn-lg"  value="Check">
 					</form>
 					
 					</div>
@@ -69,51 +69,9 @@
 			</div>
 			</div>
 		</div>
-		<!-- The Modal -->
 
-<div class="modal" id="myModal">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-  
-		<!-- Modal Header -->
-		<div class="modal-header">
-		  <button type="button" class="close" data-dismiss="modal">&times;</button>
-		</div>
-  
-		<!-- Modal body -->
-		<div class="modal-body">
-			<table class="table table-striped">
-	  <thead>
-		<tr>
-		  <th>id</th>
-		  <th>purpose</th>
-		  <th>date</th>
-	  <th>In Time</th>
-	  <th>Out Time</th>
-		</tr>
-	  </thead>
-	  <tbody>
-	  {% for u in ud %}
-		<tr>
-		  <td>{{u.uid}}</td>
-		  <td>{{u.purpose}}</td>
-		  <td>{{u.date}}</td>
-	  <td>{{u.in_time}}</td>
-	  <td>{{u.out_time}}</td>
-		</tr>
-	  {% endfor %}
-	  </tbody>
-	</table>
-	</div>
-  
-		<!-- Modal footer -->
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-danger" data-dismiss="modal">Print</button>
-		</div>
-  
-	  </div>
-	</div>
-  </div>
+
+
   
 
 		<div>
@@ -123,12 +81,7 @@
 		</div>
 
 	</section>
-	<script>
-		function openModal(){
-			$("#myModal").modal();
-			setTimeout(function(){ $("#myModal ").modal("hide"); }, 100);
-		}
-	</script>
+
 	<script src="{%static 'js/jquery.min.js' %}"></script>
   <script src="{%static 'js/popper.js' %}"></script>
   <script src="{%static 'js/bootstrap.min.js' %}"></script>
