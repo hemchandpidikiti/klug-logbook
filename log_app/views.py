@@ -1,19 +1,33 @@
+from os import name
+from django.core.validators import RegexValidator
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django import http
-from .forms import AttendeFormIn, AttendeFormOut, CreateUserForm
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+from .forms import AttendeFormIn, AttendeFormOut, CreateUserForm, SaveForm
 from .models import Attende
+from .serializers import MasterSerializer
 import pytz
+import os
+#import csv
 # from datetime import datetime
 import datetime
-
+from .models import Master
+#from log_app.ser import *
 #tz_NY = pytz.timezone('Asia/Kolkata')
 # datetime_NY = datetime.now(tz_NY)
-#IST = pytz.timezone('Asia/Kolkata')
+IST = pytz.timezone('Asia/Kolkata')
 #now1 = datetime.datetime.now(IST)
 #print(now)
 
@@ -23,10 +37,14 @@ import datetime
 # Create your views here.
 @login_required
 def index(request):
-    # attende = Attende()
+    IST = pytz.timezone('Asia/Kolkata')
+    #f = open("./static/csv/rfid.csv")
+
+    #csvreader = csv.reader(f)
+    #h = next(csvreader)
+
     form1 = AttendeFormIn()
     form2 = AttendeFormOut()
-    IST = pytz.timezone('Asia/Kolkata')
     now1 = datetime.datetime.now(IST)
 
     if request.method == 'POST' and 'in' in request.POST:
@@ -88,12 +106,14 @@ def index(request):
                     messages.success(request, 'You are OUT')
                 
             except:
-                messages.error(request, 'Your IN 404')
+                messages.error(request, 'Your LOGIN is in 404')
 
             # form2.save()
             return http.HttpResponseRedirect('')
             # form2.save()
             # Attende.objects.filter(fieldname="uid")
+    
+
     context = {'form1': form1, 'form2': form2}
     return render(request, 'logging/index.html', context)
 
@@ -107,6 +127,7 @@ def attendence(request):
 
 @login_required
 def bydate(request):
+    flag = 0
     obj = []
     if request.method == 'POST':
         fromdate = request.POST.get('fromd')
@@ -118,16 +139,20 @@ def bydate(request):
         try:
             obj = Attende.objects.filter(date__range=[fromdate, todate], room_name=rmn)
             #print(obj)
+            flag = 1
         except NotFound:
             print("InvalidDate")
     if len(obj) != 0:
         return render(request, 'logging/print.html', {'obj': obj, 'fromdate': fromdate, 'todate': todate, 'rmn': rmn})
+    elif len(obj) == 0 and flag == 1:
+        messages.error(request, 'No logs found')
     return render(request, 'logging/bydate.html')
 
 @login_required
 def id(request):
     form = AttendeFormOut()
     ud = []
+    flag = 0
     if request.method == 'POST':
         form = AttendeFormOut(request.POST)
         if form.is_valid():
@@ -139,6 +164,7 @@ def id(request):
                 # print(udetails)
                 ud = list(udetails)
                 # print(ud)
+                flag = 1
                 '''for u in ud:
                     print(u.uid)
                 for udetail in udetails:
@@ -152,6 +178,8 @@ def id(request):
     # context = {'form': form, 'udetails': udetails}
     if len(ud) != 0:
         return render(request, 'logging/print.html', {'ud': ud, 'userid': userid, 'rmn': rmn})
+    elif len(ud) == 0 and flag == 1:
+        messages.error(request, 'No logs found')
     return render(request, 'logging/id.html')
     '''
                   {
@@ -189,13 +217,13 @@ def auth_login(request):
         if form1.is_valid():
             form1.save()
             user = request.POST.get('username')
-            password=request.POST.get('password1')
-            confirm_password=request.POST.get('password2')
-            if password != confirm_password:
+           
+            
+            '''if password != confirm_password:
                 raise form1.ValidationError(
                     "password and confirm_password does not match"
                 )
-            '''profile = profile_form.save(commit=False)
+            profile = profile_form.save(commit=False)
             profile.user = user
 
             userid = profile_form.cleaned_data.get('uid')
@@ -211,8 +239,13 @@ def auth_login(request):
             messages.success(request, 'Registration successful ' + user)
             return render(request, 'registration/login.html')
         else:
-            form1 = CreateUserForm()
-            messages.error(request, "Unsuccessful registration. Invalid information.")
+            password=request.POST.get('password1')
+            confirm_password=request.POST.get('password2')
+            if password != confirm_password:
+                messages.error(request, "Password do not match")
+            else:
+                form1 = CreateUserForm()
+                messages.error(request, "Unsuccessful registration. Invalid information.")
 
     if request.method == 'POST' and 'li' in request.POST:
         username = request.POST.get('username')
@@ -250,3 +283,82 @@ def register(request):
 
     context = {'form': form}'''
 
+
+#@csrf_exempt
+def card_registrations(request):
+    fm = SaveForm()
+    #x=request.POST.get('uid')
+    if request.method == 'POST':
+        fm = SaveForm(request.POST)
+        if fm.is_valid():
+            fm.save()
+    #context = {'fm': fm}
+    return render(request, 'logging/card_reg.html')
+
+class MasterViewSet(viewsets.ModelViewSet):
+    queryset = Master.objects.all()
+    serializer_class = MasterSerializer
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+
+    '''def get_queryset(self, *args, **kwargs):
+        master_q = Master.objects.all()
+        q = request.POST.get('rfid_id')
+        return master_q'''
+
+    @action(detail=False, methods=['POST'])
+    def mget(self, request):
+        if 'rfid_id' in request.data:
+
+            rfid_id = request.data['rfid_id']
+            rfid_value = Master.objects.filter(rfid_id=rfid_id).last()
+            ruid = rfid_value.uid
+            print(ruid)
+            #user = request.user
+            ron = request.user
+            print('user ', ron)
+            print("ru ", ron.username)
+
+            # rfid_logout
+            try:
+                ao = Attende.objects.filter(room_name=ron.username, uid=ruid).last()
+                print("try")
+                print(ao)
+                aopk = ao.pk
+                print(aopk)
+                aov = Attende.objects.filter(id=aopk, out_time__isnull=True)
+                print(aov)
+                for i in aov:
+                    aovpk = i.pk
+                print(aovpk)
+                if aovpk:
+                    now2 = datetime.datetime.now(IST)
+                    Attende.objects.filter(id=aovpk).update(out_time=now2.strftime('%H:%M:%S.%f'))
+                    #messages.success(request, 'You are OUT')
+                    response = {'message': 'You are OUT'}
+                else:
+                    #messages.error(request, 'Your LOGIN is in 404')
+                    response = {'message': 'Your LOGIN is NOT FOUND'}
+
+            # rfid_login
+            except:
+                print("except")
+                a = Attende(room_name=ron.username, uid=ruid)
+                a.save()
+                #messages.success(request, 'You are IN')
+                response = {'message': 'You are IN'}
+
+            #response = {'message': 'rfid_id is posted successfully'}
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            response = {'message': 'You need to provide your rfid_id'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        response = {'message': 'You cant update'}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request, *args, **kwargs):
+        response = {'message': 'You cant create'}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
