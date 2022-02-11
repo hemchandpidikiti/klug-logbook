@@ -56,11 +56,22 @@ def index(request):
             f1 = form1.save(commit=False)
             ron = request.user
             f1.room_name = ron.username
+            userid = request.POST.get('uid')
+            #print(userid)
+            uid_value = Master.objects.filter(uid=userid).last()
+            uid_name = uid_value.name
+            #print(uid_name)
+            f1.in_time = now1.strftime('%H:%M:%S.%f')
+            f1.uname = uid_name
+            #in_time = now1.strftime('%H:%M:%S.%f')
             f1.save()
-            messages.success(request, 'You are IN')
+            #purpose = request.POST.get('purpose')
+            #print(purpose)
+            #Attende.objects.create(room_name=ron.username, uid=userid, purpose=purpose, in_time=in_time)
+            messages.success(request, f'{uid_name} You are IN')
             return http.HttpResponseRedirect('')
         else:
-            messages.error(request,'Enter correct User ID')
+            messages.error(request, 'Enter correct User ID')
             # attende.intime = temp
             # attende.outtime = temp
             # attende.save()
@@ -73,7 +84,10 @@ def index(request):
         # print(up_req)
         if form2.is_valid():
             # form2.date_out_time = (auto_now=True)
+            f2 = form2.save(commit=False)
             userid = request.POST.get('uid')
+            uid_value = Master.objects.filter(uid=userid).last()
+            uid_name = uid_value.name
             ron = request.user
             rmn = ron.username
             '''try:
@@ -87,26 +101,38 @@ def index(request):
                 lpk = l.pk
                 #print(lpk)
 
-                nvv = Attende.objects.filter(id=lpk, out_time__isnull=True)
+                now1 = datetime.datetime.now(IST)
+                nvv = Attende.objects.filter(id=lpk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
                 #print(nvv)
-                for i in nvv:
-                    #print(i)
-                    nvvpk = i.pk
-                    #print(nvvpk)
-
-                '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
-                nvpk = nv.pk
-                print(nvpk)'''
-                # print(type(lpk))
-                # now.strftime('%Y-%m-%d %H:%M:%S.%f')
-                # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                if nvvpk:
+                if not nvv:
+                    #print('l')
                     now1 = datetime.datetime.now(IST)
-                    Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
-                    messages.success(request, 'You are OUT')
+                    #f2.room_name = rmn
+                    #f2.in_time = None
+                    #f2.out_time = now1.strftime('%H:%M:%S.%f')
+                    ot = now1.strftime('%H:%M:%S.%f')
+                    Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=uid_name)
+                    # f2.save()
+                    messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND')
+                else:
+                    for i in nvv:
+                        #print(i)
+                        nvvpk = i.pk
+                        #print(nvvpk)
+
+                    '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
+                    nvpk = nv.pk
+                    print(nvpk)'''
+                    # print(type(lpk))
+                    # now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                    # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
+                    if nvvpk:
+                        now1 = datetime.datetime.now(IST)
+                        Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                        messages.success(request, f'{uid_name} You are OUT')
                 
             except:
-                messages.error(request, 'Your LOGIN is in 404')
+                messages.error(request, 'Something went wrong. TRY AGAIN')
 
             # form2.save()
             return http.HttpResponseRedirect('')
@@ -314,6 +340,10 @@ class MasterViewSet(viewsets.ModelViewSet):
             rfid_value = Master.objects.filter(rfid_id=rfid_id).last()
             ruid = rfid_value.uid
             print(ruid)
+
+            uid_value = Master.objects.filter(uid=ruid).last()
+            uid_name = uid_value.name
+
             #user = request.user
             ron = request.user
             print('user ', ron)
@@ -326,8 +356,15 @@ class MasterViewSet(viewsets.ModelViewSet):
                 print(ao)
                 aopk = ao.pk
                 print(aopk)
-                aov = Attende.objects.filter(id=aopk, out_time__isnull=True)
+                now1 = datetime.datetime.now(IST)
+                aov = Attende.objects.filter(id=aopk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
                 print(aov)
+                '''if not aov:
+                    now1 = datetime.datetime.now(IST)
+                    ot = now1.strftime('%H:%M:%S.%f')
+                    Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot)
+                    messages.error(request, 'Your LOGIN is in 404')
+                else:'''
                 for i in aov:
                     aovpk = i.pk
                 print(aovpk)
@@ -335,18 +372,20 @@ class MasterViewSet(viewsets.ModelViewSet):
                     now2 = datetime.datetime.now(IST)
                     Attende.objects.filter(id=aovpk).update(out_time=now2.strftime('%H:%M:%S.%f'))
                     #messages.success(request, 'You are OUT')
-                    response = {'message': 'You are OUT'}
+                    response = {'message': f'{uid_name} You are OUT'}
                 else:
                     #messages.error(request, 'Your LOGIN is in 404')
-                    response = {'message': 'Your LOGIN is NOT FOUND'}
+                    response = {'message': f'{uid_name} Your IN is NOT FOUND'}
 
             # rfid_login
             except:
                 print("except")
-                a = Attende(room_name=ron.username, uid=ruid)
+                now1 = datetime.datetime.now(IST)
+                in_time = now1.strftime('%H:%M:%S.%f')
+                a = Attende(room_name=ron.username, uid=ruid, in_time=in_time, uname=uid_name)
                 a.save()
                 #messages.success(request, 'You are IN')
-                response = {'message': 'You are IN'}
+                response = {'message': f'{uid_name} You are IN'}
 
             #response = {'message': 'rfid_id is posted successfully'}
             return Response(response, status=status.HTTP_200_OK)
@@ -362,3 +401,66 @@ class MasterViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         response = {'message': 'You cant create'}
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+    @action(detail=False, methods=['POST'])
+    def fp(self, request):
+        if 'uid' in request.data:
+
+            face_id = request.data['uid']
+
+            uid_value = Master.objects.filter(uid=face_id).last()
+            print(uid_value)
+            uid_name = uid_value.name
+
+            # user = request.user
+            ron = request.user
+            print('user ', ron)
+            print("ru ", ron.username)
+
+            # face_logout
+            try:
+                ao = Attende.objects.filter(room_name=ron.username, uid=face_id).last()
+                print("try")
+                print(ao)
+                aopk = ao.pk
+                print(aopk)
+                now1 = datetime.datetime.now(IST)
+                aov = Attende.objects.filter(id=aopk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
+                print(aov)
+                '''if not aov:
+                    now1 = datetime.datetime.now(IST)
+                    ot = now1.strftime('%H:%M:%S.%f')
+                    Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot)
+                    messages.error(request, 'Your LOGIN is in 404')
+                else:'''
+                for i in aov:
+                    aovpk = i.pk
+                print(aovpk)
+                if aovpk:
+                    now2 = datetime.datetime.now(IST)
+                    Attende.objects.filter(id=aovpk).update(out_time=now2.strftime('%H:%M:%S.%f'))
+                    # messages.success(request, 'You are OUT')
+                    response = {'message': f'{uid_name} You are OUT'}
+                else:
+                    # messages.error(request, 'Your LOGIN is in 404')
+                    response = {'message': f'{uid_name} Your IN is NOT FOUND'}
+
+            # face_login
+            except:
+                print("except")
+                now1 = datetime.datetime.now(IST)
+                in_time = now1.strftime('%H:%M:%S.%f')
+                a = Attende(room_name=ron.username, uid=face_id, in_time=in_time, uname=uid_name)
+                a.save()
+                # messages.success(request, 'You are IN')
+                response = {'message': f'{uid_name} You are IN'}
+
+            # response = {'message': 'rfid_id is posted successfully'}
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            response = {'message': 'You need to provide your rfid_id'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)

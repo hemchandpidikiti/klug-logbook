@@ -2,13 +2,13 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Attende
+from .models import Attende, Master
 from django.forms import ModelForm, TextInput, EmailInput
 class AttendeFormIn(forms.ModelForm):
     class Meta:
         model = Attende
         fields = '__all__'
-        exclude = ['room_name', 'out_time']
+        exclude = ['room_name', 'uname', 'in_time', 'out_time', 'uname']
 
 class AttendeFormOut(forms.ModelForm):
     class Meta:
@@ -32,20 +32,21 @@ class CreateUserForm(UserCreationForm):
             'username': TextInput(attrs={
                 'class': "form-control",
                 'style': 'width: 100%;',
-                'placeholder': 'Enter Student ID or Employee ID',
-                
+                'placeholder': 'Enter Student ID or Employee ID'
                 }),
             'first_name': TextInput(attrs={
                 'class': "form-control", 
                 'style': 'width: 100%;',
-                'placeholder': 'User Name',
-                'required':'True'
+                'placeholder': 'User Name'
                 }),
             'email': EmailInput(attrs={
                 'class': "form-control", 
                 'style': 'width: 100%;',
-                'placeholder': 'Enter Email',
-                'required':'True'
+                'placeholder': 'Enter Email'
                 })
                 
         }
+class SaveForm(forms.ModelForm):
+    class Meta:
+        model = Master
+        fields = ['rfid_id']

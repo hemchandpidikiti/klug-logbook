@@ -9,13 +9,15 @@ class Attende(models.Model):
     #User = settings.AUTH_USER_MODEL
     #user = models.ForeignKey(User, null=True)
     room_name = models.CharField(max_length=12, blank=False, null=False)
+    uname = models.CharField(max_length=30, null=True)
     uid = models.IntegerField(validators=[MinValueValidator(1000)], blank=False)
     purpose = models.CharField(max_length=12, blank=False)
     date = models.DateField(auto_now_add=True)
-    in_time = models.TimeField(auto_now_add=True, null=False)
+    in_time = models.TimeField(null=True)
     out_time = models.TimeField(null=True)
 
 class Master(models.Model):
+    name = models.CharField(max_length=30, null=True)
     rfid_id = models.CharField(max_length=12)
     uid = models.IntegerField(validators=[MinValueValidator(1000)])
 
