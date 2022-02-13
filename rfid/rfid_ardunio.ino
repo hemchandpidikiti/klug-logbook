@@ -10,12 +10,12 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);   
 const int buzzer = D1;
 String userid;
-
+String payload;
+HTTPClient http;  
 void setup() 
 {
   pinMode(buzzer, OUTPUT);
-  //WiFi.begin("Dlink_Repeater", "Mounika321");                   //WiFi connection
-  WiFi.begin("mypc", "mounika4");
+  WiFi.begin("wifi_ssid", "wifi_password");                   //WiFi connection
  ESP8266WebServer server(80);
   while (WiFi.status() != WL_CONNECTED) {                        //Wait for the WiFI connection completion
  
@@ -28,10 +28,24 @@ void setup()
   SPI.begin();           // Init SPI bus
   mfrc522.PCD_Init();    // Init MFRC522 card
   mfrc522.PCD_DumpVersionToSerial();  // Show details of PCD - MFRC522 Card Reader details
-  //Serial.println(F("Scan your ID Card......................"));
-  
-}
+  Serial.println(F("Scan your ID Card......................"));
+  if (WiFi.status() == WL_CONNECTED) {
+  http.begin("http://ip_address/auth/");
+   
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");//Specify content-type header
+    int httpCode = http.POST("username=xxxxx&password=xxxxx");
+    
+    Serial.print("http Status:\t");
+    Serial.println(httpCode);                           //Print HTTP return code
+    http.addHeader("Content-Type:","application/json");
+    payload = http.getString();                  //Get the response payload
+    Serial.print("authorization token:\t");
+    Serial.println(payload);                            //Print request response payload
 
+  http.end();
+}
+Serial.println(F("Scan your ID Card......................"));
+}
 void loop() 
 {
   if (WiFi.status() == WL_CONNECTED) {                      //Check WiFi connection status
@@ -55,22 +69,7 @@ void loop()
  Serial.println("Scan card.............");
  printDec(mfrc522.uid.uidByte, mfrc522.uid.size);//user Defined Function
  //digitalWrite(buzzer,HIGH); // Send 1KHz sound signal...
- 
- 
-
-   http.begin("http://sqlitelog.herokuapp.com/auth/");
-  http.addHeader("Content-Type", "application/x-www-form-urlencoded");//Specify content-type header
-    int httpCode = http.POST("username=admin&password=admin");
-    
-    Serial.print("http Status:\t");
-    Serial.println(httpCode);                           //Print HTTP return code
-    http.addHeader("Content-Type:","application/json");
-    String payload = http.getString();                  //Get the response payload
-    Serial.print("authorization token:\t");
-    Serial.println(payload);                            //Print request response payload
-
-   
-    // Allocate JsonBuffer
+// Allocate JsonBuffer
     // Use arduinojson.org/assistant to compute the capacity.
     const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
     DynamicJsonBuffer jsonBuffer(capacity);
@@ -86,7 +85,7 @@ void loop()
     String payload2="Token "+root2;
     
     
-    http.begin("http://sqlitelog.herokuapp.com/api/master/mget/");
+    http.begin("http://ip_address/api/master/mget/");
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
     http.addHeader("Authorization",payload2);
     int httpCode2 = http.POST("rfid_id="+userid);
@@ -99,7 +98,7 @@ void loop()
     
     tone(buzzer,3000);
     delay(80);
-    Serial.print("buzzer");
+    Serial.println("buzzer");
  //digitalWrite(buzzer,LOW);
     noTone(buzzer);
     delay(500);
