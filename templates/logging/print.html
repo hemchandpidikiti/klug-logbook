@@ -34,6 +34,7 @@
       <thead class="thead-light">
       <tr>
         <th>id</th>
+        <th>Name</th>
         <th>purpose</th>
         <th>date</th>
       <th>In Time</th>
@@ -44,10 +45,11 @@
       {% for u in ud %}
       <tr>
         <td>{{u.uid}}</td>
+        <td>{{u.uname}}</td>
         <td>{{u.purpose}}</td>
         <td>{{u.date}}</td>
-      <td>{{u.in_time}}</td>
-      <td>{{u.out_time}}</td>
+        <td>{{u.in_time}}</td>
+        <td>{{u.out_time}}</td>
       </tr>
       {% endfor %}
       </tbody>
@@ -63,6 +65,7 @@
     <thead class="thead-light">
     <tr>
       <th>id</th>
+      <th>Name</th>
       <th>purpose</th>
       <th>date</th>
     <th>In Time</th>
@@ -73,6 +76,7 @@
     {% for u in obj %}
     <tr>
       <td>{{u.uid}}</td>
+      <td>{{u.uname}}</td>
       <td>{{u.purpose}}</td>
       <td>{{u.date}}</td>
     <td>{{u.in_time}}</td>
