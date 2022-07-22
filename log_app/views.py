@@ -20,6 +20,7 @@ from .models import Attende
 from .serializers import MasterSerializer
 import pytz
 import os
+import requests
 #import csv
 # from datetime import datetime
 import datetime
@@ -52,24 +53,51 @@ def index(request):
         form1 = AttendeFormIn(request.POST)
 
         if form1.is_valid():
-            #print(form1)
+            print(form1)
             f1 = form1.save(commit=False)
             ron = request.user
             f1.room_name = ron.username
             userid = request.POST.get('uid')
-            #print(userid)
+            # print(userid)
             uid_value = Master.objects.filter(uid=userid).last()
             uid_name = uid_value.name
-            #print(uid_name)
+            # print(uid_name)
             f1.in_time = now1.strftime('%H:%M:%S.%f')
             f1.uname = uid_name
-            #in_time = now1.strftime('%H:%M:%S.%f')
+            # in_time = now1.strftime('%H:%M:%S.%f')
             f1.save()
-            #purpose = request.POST.get('purpose')
-            #print(purpose)
-            #Attende.objects.create(room_name=ron.username, uid=userid, purpose=purpose, in_time=in_time)
+            # purpose = request.POST.get('purpose')
+            # print(purpose)
+            # Attende.objects.create(room_name=ron.username, uid=userid, purpose=purpose, in_time=in_time)
             messages.success(request, f'{uid_name} You are IN')
             return http.HttpResponseRedirect('')
+
+            '''#print(form1)
+            f1 = form1.save(commit=False)
+            userid = request.POST.get('uid')
+            #ron = request.user
+            #f1.room_name = ron.username
+
+            print(userid)
+            purpose = request.POST.get('purpose')
+            uid_value = Master.objects.filter(uid=userid).last()
+            if not uid_value:
+                messages.error(request, 'Your Record NOT FOUND')
+            else:
+                ron = request.user
+                uid_name = uid_value.name
+                #print(uid_name)
+                #f1.in_time = now1.strftime('%H:%M:%S.%f')
+                in_time = now1.strftime('%H:%M:%S.%f')
+                #f1.uname = uid_name
+                #f1.authentication_type = 'web'
+                #in_time = now1.strftime('%H:%M:%S.%f')
+                #f1.save()
+                #purpose = request.POST.get('purpose')
+                #print(purpose)
+                Attende.objects.create(room_name=ron.username, uid=userid, purpose=purpose, in_time=in_time, out_time=None, uname=uid_name, authentication_type='web')
+                messages.success(request, f'{uid_name} You are IN')
+                return http.HttpResponseRedirect('')'''
         else:
             messages.error(request, 'Enter correct User ID')
             # attende.intime = temp
@@ -87,52 +115,55 @@ def index(request):
             f2 = form2.save(commit=False)
             userid = request.POST.get('uid')
             uid_value = Master.objects.filter(uid=userid).last()
-            uid_name = uid_value.name
-            ron = request.user
-            rmn = ron.username
-            '''try:
-                f = Attende.objects.get(uid = userid)
-            except Attende.DoesNotExist:
-                return redirect('index')'''
-            # if Attende.objects.get(uid=userid):
-            # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
-            try:
-                l = Attende.objects.filter(uid=userid, room_name=rmn).last()
-                lpk = l.pk
-                #print(lpk)
+            if not uid_value:
+                messages.error(request, 'Your Record NOT FOUND')
+            else:
+                uid_name = uid_value.name
+                ron = request.user
+                rmn = ron.username
+                '''try:
+                    f = Attende.objects.get(uid = userid)
+                except Attende.DoesNotExist:
+                    return redirect('index')'''
+                # if Attende.objects.get(uid=userid):
+                # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
+                try:
+                    l = Attende.objects.filter(uid=userid, room_name=rmn).last()
+                    lpk = l.pk
+                    #print(lpk)
 
-                now1 = datetime.datetime.now(IST)
-                nvv = Attende.objects.filter(id=lpk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
-                #print(nvv)
-                if not nvv:
-                    #print('l')
                     now1 = datetime.datetime.now(IST)
-                    #f2.room_name = rmn
-                    #f2.in_time = None
-                    #f2.out_time = now1.strftime('%H:%M:%S.%f')
-                    ot = now1.strftime('%H:%M:%S.%f')
-                    Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=uid_name)
-                    # f2.save()
-                    messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND')
-                else:
-                    for i in nvv:
-                        #print(i)
-                        nvvpk = i.pk
-                        #print(nvvpk)
-
-                    '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
-                    nvpk = nv.pk
-                    print(nvpk)'''
-                    # print(type(lpk))
-                    # now.strftime('%Y-%m-%d %H:%M:%S.%f')
-                    # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                    if nvvpk:
+                    nvv = Attende.objects.filter(id=lpk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
+                    #print(nvv)
+                    if not nvv:
+                        #print('l')
                         now1 = datetime.datetime.now(IST)
-                        Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
-                        messages.success(request, f'{uid_name} You are OUT')
-                
-            except:
-                messages.error(request, 'Something went wrong. TRY AGAIN')
+                        #f2.room_name = rmn
+                        #f2.in_time = None
+                        #f2.out_time = now1.strftime('%H:%M:%S.%f')
+                        ot = now1.strftime('%H:%M:%S.%f')
+                        Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=uid_name, authentication_type='web')
+                        # f2.save()
+                        messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND')
+                    else:
+                        for i in nvv:
+                            #print(i)
+                            nvvpk = i.pk
+                            #print(nvvpk)
+
+                        '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
+                        nvpk = nv.pk
+                        print(nvpk)'''
+                        # print(type(lpk))
+                        # now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                        # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
+                        if nvvpk:
+                            now1 = datetime.datetime.now(IST)
+                            Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                            messages.success(request, f'{uid_name} You are OUT')
+
+                except:
+                    messages.error(request, 'Something went wrong. TRY AGAIN')
 
             # form2.save()
             return http.HttpResponseRedirect('')
@@ -333,6 +364,17 @@ class MasterViewSet(viewsets.ModelViewSet):
         return master_q'''
 
     @action(detail=False, methods=['POST'])
+    def rfid_get(self, request):
+        if 'rfid_id' in request.data:
+            rfid_id = request.data['rfid_id']
+            rfid_value = Master.objects.filter(rfid_id=rfid_id).last()
+            r_uid = rfid_value.uid
+            print(r_uid)
+            response = {'message': f'{r_uid} Your ID is scanned'}
+        return Response(response, status=status.HTTP_200_OK)
+
+
+    @action(detail=False, methods=['POST'])
     def mget(self, request):
         if 'rfid_id' in request.data:
 
@@ -382,7 +424,7 @@ class MasterViewSet(viewsets.ModelViewSet):
                 print("except")
                 now1 = datetime.datetime.now(IST)
                 in_time = now1.strftime('%H:%M:%S.%f')
-                a = Attende(room_name=ron.username, uid=ruid, in_time=in_time, uname=uid_name)
+                a = Attende(room_name=ron.username, uid=ruid, in_time=in_time, uname=uid_name, authentication_type='RFID')
                 a.save()
                 #messages.success(request, 'You are IN')
                 response = {'message': f'{uid_name} You are IN'}
@@ -464,3 +506,15 @@ class MasterViewSet(viewsets.ModelViewSet):
         else:
             response = {'message': 'You need to provide your rfid_id'}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+@login_required
+def rfid_pc(request):
+    url = 'http://127.0.0.1:8000/api/master/rfid_get/'
+    #display_data = requests.get('http://127.0.0.1:8000/api/master/rfid_get/')
+    #Master_viewset = MasterViewSet
+    #function_call = url.rfid_get()
+    api_call = requests.get(url)
+    result = api_call.json()
+    print(result)
+    context = {'result': result}
+    return render(request, 'logging/rfid_pc.html', context)

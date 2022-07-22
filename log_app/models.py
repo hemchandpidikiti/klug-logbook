@@ -15,6 +15,10 @@ class Attende(models.Model):
     date = models.DateField(auto_now_add=True)
     in_time = models.TimeField(null=True)
     out_time = models.TimeField(null=True)
+    authentication_type = models.CharField(max_length=4, null=False)
+
+    def __str__(self):
+        return str(self.uid)
 
 class Master(models.Model):
     name = models.CharField(max_length=30, null=True)
@@ -24,6 +28,9 @@ class Master(models.Model):
     class Meta:
         unique_together = (('rfid_id', 'uid'),)
         index_together = (('rfid_id', 'uid'),)
+
+    def __str__(self):
+        return str(self.uid)
 
 '''class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
