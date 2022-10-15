@@ -53,7 +53,7 @@ def index(request):
         form1 = AttendeFormIn(request.POST)
 
         if form1.is_valid():
-            print(form1)
+            #print(form1)
             f1 = form1.save(commit=False)
             ron = request.user
             f1.room_name = ron.username
@@ -64,6 +64,7 @@ def index(request):
             # print(uid_name)
             f1.in_time = now1.strftime('%H:%M:%S.%f')
             f1.uname = uid_name
+            f1.authentication_type = 'WEB'
             # in_time = now1.strftime('%H:%M:%S.%f')
             f1.save()
             # purpose = request.POST.get('purpose')
@@ -144,7 +145,7 @@ def index(request):
                         ot = now1.strftime('%H:%M:%S.%f')
                         Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=uid_name, authentication_type='web')
                         # f2.save()
-                        messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND')
+                        messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND !!! Your Entry is Noted')
                     else:
                         for i in nvv:
                             #print(i)
@@ -373,7 +374,6 @@ class MasterViewSet(viewsets.ModelViewSet):
             response = {'message': f'{r_uid} Your ID is scanned'}
         return Response(response, status=status.HTTP_200_OK)
 
-
     @action(detail=False, methods=['POST'])
     def mget(self, request):
         if 'rfid_id' in request.data:
@@ -424,7 +424,8 @@ class MasterViewSet(viewsets.ModelViewSet):
                 print("except")
                 now1 = datetime.datetime.now(IST)
                 in_time = now1.strftime('%H:%M:%S.%f')
-                a = Attende(room_name=ron.username, uid=ruid, in_time=in_time, uname=uid_name, authentication_type='RFID')
+                # remove authentication_type
+                a = Attende(room_name=ron.username, uid=ruid, in_time=in_time, uname=uid_name, authentication_type= 'RFID')
                 a.save()
                 #messages.success(request, 'You are IN')
                 response = {'message': f'{uid_name} You are IN'}
