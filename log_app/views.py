@@ -169,6 +169,7 @@ def index(request):
                         now1 = datetime.datetime.now(IST)
                         Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
                         if uid_value:
+                            uid_name = uid_value.name
                             messages.success(request, f'{uid_name} You are OUT')
                         else:
                             messages.error(request, f'{userid} You are NOT Registered. Contact ADMIN !!! You are OUT')
