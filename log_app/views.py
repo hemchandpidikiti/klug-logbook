@@ -60,17 +60,23 @@ def index(request):
             userid = request.POST.get('uid')
             # print(userid)
             uid_value = Master.objects.filter(uid=userid).last()
-            uid_name = uid_value.name
-            # print(uid_name)
+            # if the value of variable is true or exits.
+            if uid_value:
+                uid_name = uid_value.name
+                # print(uid_name)
+                f1.uname = uid_name
             f1.in_time = now1.strftime('%H:%M:%S.%f')
-            f1.uname = uid_name
+            # f1.uname = uid_name
             f1.authentication_type = 'WEB'
             # in_time = now1.strftime('%H:%M:%S.%f')
             f1.save()
             # purpose = request.POST.get('purpose')
             # print(purpose)
             # Attende.objects.create(room_name=ron.username, uid=userid, purpose=purpose, in_time=in_time)
-            messages.success(request, f'{uid_name} You are IN')
+            if uid_value:
+                messages.success(request, f'{uid_name} You are IN')
+            else:
+                messages.error(request, f'{userid} You are IN. Please register by contacting ADMIN !!!')
             return http.HttpResponseRedirect('')
 
             '''#print(form1)
@@ -116,60 +122,64 @@ def index(request):
             f2 = form2.save(commit=False)
             userid = request.POST.get('uid')
             uid_value = Master.objects.filter(uid=userid).last()
-            if not uid_value:
-                messages.error(request, 'Your Record NOT FOUND')
-            else:
-                uid_name = uid_value.name
-                ron = request.user
-                rmn = ron.username
-                '''try:
-                    f = Attende.objects.get(uid = userid)
-                except Attende.DoesNotExist:
-                    return redirect('index')'''
-                # if Attende.objects.get(uid=userid):
-                # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
-                try:
-                    l = Attende.objects.filter(uid=userid, room_name=rmn).last()
-                    lpk = l.pk
-                    #print(lpk)
+            # uid_name = uid_value.name
+            ron = request.user
+            rmn = ron.username
+            '''try:
+                f = Attende.objects.get(uid = userid)
+            except Attende.DoesNotExist:
+                return redirect('index')'''
+            # if Attende.objects.get(uid=userid):
+            # print(now.strftime('%Y-%m-%d %H:%M:%S.%f'))
+            try:
+                l = Attende.objects.filter(uid=userid, room_name=rmn).last()
+                lpk = l.pk
+                #print(lpk)
 
+                now1 = datetime.datetime.now(IST)
+                nvv = Attende.objects.filter(id=lpk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
+                #print(nvv)
+                if not nvv:
+                    #print('l')
                     now1 = datetime.datetime.now(IST)
-                    nvv = Attende.objects.filter(id=lpk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
-                    #print(nvv)
-                    if not nvv:
-                        #print('l')
-                        now1 = datetime.datetime.now(IST)
-                        #f2.room_name = rmn
-                        #f2.in_time = None
-                        #f2.out_time = now1.strftime('%H:%M:%S.%f')
-                        ot = now1.strftime('%H:%M:%S.%f')
+                    #f2.room_name = rmn
+                    #f2.in_time = None
+                    #f2.out_time = now1.strftime('%H:%M:%S.%f')
+                    ot = now1.strftime('%H:%M:%S.%f')
+                    if not uid_value:
+                        Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=None, authentication_type='web')
+                        messages.error(request, f'{userid} You are NOT Registered. Contact ADMIN !!!. Your Recent IN is NOT FOUND, Your OUT Entry is Noted')
+                    else:
+                        uid_name = uid_value.name
                         Attende.objects.create(room_name=rmn, uid=userid, in_time=None, out_time=ot, uname=uid_name, authentication_type='web')
                         # f2.save()
-                        messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND !!! Your Entry is Noted')
-                    else:
-                        for i in nvv:
-                            #print(i)
-                            nvvpk = i.pk
-                            #print(nvvpk)
-
-                        '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
-                        nvpk = nv.pk
-                        print(nvpk)'''
-                        # print(type(lpk))
-                        # now.strftime('%Y-%m-%d %H:%M:%S.%f')
-                        # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
-                        if nvvpk:
-                            now1 = datetime.datetime.now(IST)
-                            Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                        messages.error(request, f'{uid_name} Your Recent IN is NOT FOUND !!! Your OUT Entry is Noted')
+                else:
+                    for i in nvv:
+                        #print(i)
+                        nvvpk = i.pk
+                        #print(nvvpk)
+                    '''nv = Attende.objects.filter(uid=userid, room_name=rmn, out_time__isnull=True).last()
+                    nvpk = nv.pk
+                    print(nvpk)'''
+                    # print(type(lpk))
+                    # now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                    # datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")
+                    if nvvpk:
+                        now1 = datetime.datetime.now(IST)
+                        Attende.objects.filter(id=nvvpk).update(out_time=now1.strftime('%H:%M:%S.%f'))
+                        if uid_value:
                             messages.success(request, f'{uid_name} You are OUT')
+                        else:
+                            messages.error(request, f'{userid} You are NOT Registered. Contact ADMIN !!! You are OUT')
 
-                except:
-                    messages.error(request, 'Something went wrong. TRY AGAIN')
+            except:
+                messages.error(request, 'Something went wrong. TRY AGAIN')
 
-            # form2.save()
-            return http.HttpResponseRedirect('')
-            # form2.save()
-            # Attende.objects.filter(fieldname="uid")
+        # form2.save()
+        return http.HttpResponseRedirect('')
+        # form2.save()
+        # Attende.objects.filter(fieldname="uid")
     
 
     context = {'form1': form1, 'form2': form2}
@@ -370,7 +380,7 @@ class MasterViewSet(viewsets.ModelViewSet):
             rfid_id = request.data['rfid_id']
             rfid_value = Master.objects.filter(rfid_id=rfid_id).last()
             r_uid = rfid_value.uid
-            print(r_uid)
+            #print(r_uid)
             response = {'message': f'{r_uid} Your ID is scanned'}
         return Response(response, status=status.HTTP_200_OK)
 
@@ -381,26 +391,26 @@ class MasterViewSet(viewsets.ModelViewSet):
             rfid_id = request.data['rfid_id']
             rfid_value = Master.objects.filter(rfid_id=rfid_id).last()
             ruid = rfid_value.uid
-            print(ruid)
+            #print(ruid)
 
             uid_value = Master.objects.filter(uid=ruid).last()
             uid_name = uid_value.name
 
             #user = request.user
             ron = request.user
-            print('user ', ron)
-            print("ru ", ron.username)
+            #print('user ', ron)
+            #print("ru ", ron.username)
 
             # rfid_logout
             try:
                 ao = Attende.objects.filter(room_name=ron.username, uid=ruid).last()
-                print("try")
-                print(ao)
+                #print("try")
+                #print(ao)
                 aopk = ao.pk
-                print(aopk)
+                #print(aopk)
                 now1 = datetime.datetime.now(IST)
                 aov = Attende.objects.filter(id=aopk, date=now1.strftime('%Y-%m-%d'), out_time__isnull=True)
-                print(aov)
+                #print(aov)
                 '''if not aov:
                     now1 = datetime.datetime.now(IST)
                     ot = now1.strftime('%H:%M:%S.%f')
@@ -409,7 +419,7 @@ class MasterViewSet(viewsets.ModelViewSet):
                 else:'''
                 for i in aov:
                     aovpk = i.pk
-                print(aovpk)
+                #print(aovpk)
                 if aovpk:
                     now2 = datetime.datetime.now(IST)
                     Attende.objects.filter(id=aovpk).update(out_time=now2.strftime('%H:%M:%S.%f'))
@@ -421,7 +431,7 @@ class MasterViewSet(viewsets.ModelViewSet):
 
             # rfid_login
             except:
-                print("except")
+                #print("except")
                 now1 = datetime.datetime.now(IST)
                 in_time = now1.strftime('%H:%M:%S.%f')
                 # remove authentication_type
